@@ -29,7 +29,7 @@ module.exports = async function (req, res) {
       return res.status(400).json({ error: "Missing fields" });
     }
 
-    const response = await fetch("https://app.cartpanda.com/api/subscriptions", {
+    const response = await fetch("https://cartpanda.com/api/v1/subscriptions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.CARTPANDA_API_TOKEN}`,
@@ -55,6 +55,6 @@ module.exports = async function (req, res) {
 
   } catch (err) {
     console.error("Erro no webhook:", err);
-    return res.status(500).json({ error: true });
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
