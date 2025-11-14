@@ -30,13 +30,14 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         customer_id: customerId,
         payment_method_id: paymentMethodId,
-        variant_id: 123456,    // <-- COLOQUE AQUI o variant_id da sua assinatura
-        quantity: 1,
-        interval_unit: "month",
-        interval_count: 1,
-        price: 4900,           // <-- preço em centavos (49.00 = 4900)
-        status: "active",
-        start_date: null
+        variant_id: 202602407,
+quantity: 1,
+interval_unit: "month",
+interval_count: 1,
+price: 16900,   // $169 USD em centavos
+status: "active",
+start_date: null
+
       })
     });
 
