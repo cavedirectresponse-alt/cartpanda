@@ -4,10 +4,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    console.log("Webhook recebido:", req.body);
+    console.log("Webhook recebido da CartPanda:", req.body);
 
     const body = req.body;
 
+    // 1) Conferir se o evento é order.paid
     const event = body.event;
     if (event !== "order.paid") {
       return res.status(200).json({ ok: true, ignored: true });
@@ -15,11 +16,12 @@ export default async function handler(req, res) {
 
     const data = body.data;
 
+    // 2) Extrair customer_id + payment_method_id
     const customerId = data.customer_id;
     const paymentMethodId = data.payment_method_id;
 
-    // 🔥 Criar assinatura via API da CartPanda
-    const response = await fetch("https://api.cartpanda.com/subscriptions", {
+    // 3) Criar assinatura via API do CartPanda
+    const response = await fetch("https://api.cartpanda.com/v1/subscriptions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${process.env.CARTPANDA_API_TOKEN}`,
@@ -28,21 +30,20 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         customer_id: customerId,
         payment_method_id: paymentMethodId,
-        variant_id: 123456, // coloque seu variant_id da assinatura
+        variant_id: 123456,    // <-- COLOQUE AQUI o variant_id da sua assinatura
         quantity: 1,
         interval_unit: "month",
         interval_count: 1,
-        price: 4900, // preço em centavos (49.00 USD)
+        price: 4900,           // <-- preço em centavos (49.00 = 4900)
         status: "active",
         start_date: null
       })
     });
 
     const json = await response.json();
+    console.log("Resposta da criação da assinatura:", json);
 
-    console.log("Assinatura criada:", json);
-
-    return res.status(200).json({ ok: true });
+    return res.status(200).json({ ok: true, subscription: json });
   } catch (err) {
     console.error("Erro no webhook:", err);
     return res.status(500).json({ error: true });
