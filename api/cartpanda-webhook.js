@@ -31,9 +31,10 @@ export default async function handler(req, res) {
         customer_id: customerId,
         payment_method_id: paymentMethodId,
         variant_id: 202602407,
-        quantity: 1,
+        price: 16900, // $169.00 USD
         interval_unit: "month",
-        interval_count: 1,
+        interval_count: 1
+
         price: 16900,   // $169 USD em centavos
         status: "active",
         start_date: null
